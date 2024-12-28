@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.ui.view" id="view_ir_config_inherit_form">
+    <field name="name">base.view_ir_config_inherit_form</field>
+    <field name="model">ir.config_parameter</field>
+    <field name="inherit_id" ref="base.view_ir_config_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//form" position="attributes">
+        <attribute name="js_class">web_url_view_ir_config_inherit_form</attribute>
+      </xpath>
+      <xpath expr="//field[@name='key']" position="after">
+        <field name="key"/>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

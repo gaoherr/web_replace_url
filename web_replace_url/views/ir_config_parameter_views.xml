@@ -9,9 +9,6 @@
       <xpath expr="//form" position="attributes">
         <attribute name="js_class">web_url_view_ir_config_inherit_form</attribute>
       </xpath>
-      <xpath expr="//field[@name='key']" position="after">
-        <field name="key"/>
-      </xpath>
     </field>
   </record>
 

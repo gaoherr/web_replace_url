@@ -9,6 +9,7 @@
     "description":"Odoo18 Replace odoo in hyperlink",
     "category": "Extra Tools",
     "license": "LGPL-3",
+	'images': ['static/description/main_banner.png'],
     "depends": ["web",'base'],
     "application": False,
     "installable": True,
@@ -22,4 +23,5 @@
         ],
     },
     "installable": True,
+    'uninstall_hook': '_uninstall_cleanup',
 }

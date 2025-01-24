@@ -23,6 +23,8 @@ def content(self):
     content = super(JavascriptAsset, self).content
     if self.name == "/web/static/src/core/browser/router.js":
         content = re.sub(r'(?<!@)odoo', base_sorturl[0], content)
+    if self.name == "/web/static/src/webclient/navbar/navbar.js":
+        content = re.sub(r'(?<!@)odoo', base_sorturl[0], content)
     if self.is_transpiled:
         if not self._converted_content:
             self._converted_content = transpile_javascript(self.url, content)

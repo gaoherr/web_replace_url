@@ -23,4 +23,5 @@
         ],
     },
     "installable": True,
+    'uninstall_hook': '_uninstall_cleanup',
 }

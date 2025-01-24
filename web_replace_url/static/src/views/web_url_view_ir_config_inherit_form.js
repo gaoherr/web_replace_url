@@ -8,8 +8,9 @@ const defaulRegistry= registry.category("default")
 export class ReloadFormController extends FormController {
     async save({ closable, ...otherParams }) {
       const saved = await super.save(otherParams);
+      debugger
       if ( saved && this.model.root._values.key=='web.base.sorturl'){
-        redirect("/")
+        redirect("/?debug=assets")
       }else{
         return saved;
       }

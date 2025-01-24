@@ -24,4 +24,5 @@
     },
     "installable": True,
     'uninstall_hook': '_uninstall_cleanup',
+    'post_init_hook': '_setup_module',
 }

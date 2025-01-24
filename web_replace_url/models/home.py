@@ -17,6 +17,7 @@ from odoo import api, fields, models, _
 
 from odoo.addons.base.models import ir_config_parameter
 
+base_sorturl=['']
 
 class IrConfigParameter(models.Model):
     _inherit = "ir.config_parameter"

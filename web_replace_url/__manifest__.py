@@ -1,7 +1,7 @@
 # Copyright 2018 Simone Orsi - Camptocamp SA
 # License LGPLv3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.en.html).
 {
-    "name": "Url odoo18 Replace",
+    "name": "Url odoo Replace",
     'version': '19.0.3',
     "author": "1311793927@qq.com",
     'support': '1311793927qq.com',

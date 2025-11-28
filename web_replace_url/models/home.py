@@ -17,7 +17,7 @@ from odoo.service import security
 from odoo.tools.translate import _
 from odoo.modules.registry import Registry
 from odoo import api, fields, models, _
-from odoo.tools import transpile_javascript
+from odoo.tools.js_transpiler import transpile_javascript
 from odoo.addons.base.models import ir_config_parameter
 from odoo.addons.base.models.assetsbundle import JavascriptAsset
 import werkzeug.utils
@@ -62,7 +62,9 @@ def url_init(self, httprequest):
             "odoo", base_sorturl[0])
     self.httprequest = httprequest
     self.future_response = http.FutureResponse()
-    self.dispatcher = http._dispatchers['http'](self)
+    self.dispatcher = http._dispatchers['http'](self)  # until we match
+    #self.params = {}  # set by the Dispatcher
+
     self.geoip = http.GeoIP(httprequest.remote_addr)
     self.registry = None
     self.env = None
@@ -76,8 +78,7 @@ def routing_map(self, key=None):
     ).get_param("web.base.sorturl", "")
     _logger.info("Generating routing map for key %s", str(key))
     registry = Registry(threading.current_thread().dbname)
-    installed = registry._init_modules.union(
-        odoo.conf.server_wide_modules)
+    installed = registry._init_modules.union(odoo.tools.config['server_wide_modules'])
     mods = sorted(installed)
     routing_map = werkzeug.routing.Map(
         strict_slashes=False, converters=self._get_converters())

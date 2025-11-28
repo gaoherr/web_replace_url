@@ -1,6 +1,6 @@
 from . import models
 from odoo.addons.base.models.assetsbundle import JavascriptAsset
-from odoo.tools import transpile_javascript
+from odoo.tools.js_transpiler import transpile_javascript
 import re
 import odoo
 from .models.home  import base_sorturl
@@ -22,17 +22,17 @@ from odoo import http
 
 
 
+
+
 def _uninstall_cleanup(env):
 
     @property
     def content(self):
-        if self.name == "/web/static/src/core/browser/router.js":
-            pass
-        content = super(JavascriptAsset, self).content
+        content = super(JavascriptAsset,self).content
         if self.is_transpiled:
             if not self._converted_content:
-                self._converted_content = transpile_javascript(
-                    self.url, content)
+                from odoo.tools.js_transpiler import transpile_javascript  # noqa: PLC0415
+                self._converted_content = transpile_javascript(self.url, content)
             return self._converted_content
         return content
 
@@ -41,7 +41,9 @@ def _uninstall_cleanup(env):
     def url_init(self, httprequest):
         self.httprequest = httprequest
         self.future_response = http.FutureResponse()
-        self.dispatcher = http._dispatchers['http'](self)
+        self.dispatcher = http._dispatchers['http'](self)  # until we match
+        #self.params = {}  # set by the Dispatcher
+
         self.geoip = http.GeoIP(httprequest.remote_addr)
         self.registry = None
         self.env = None
@@ -53,14 +55,17 @@ def _uninstall_cleanup(env):
     def routing_map(self, key=None):
         _logger.info("Generating routing map for key %s", str(key))
         registry = Registry(threading.current_thread().dbname)
-        installed = registry._init_modules.union(odoo.conf.server_wide_modules)
+        installed = registry._init_modules.union(odoo.tools.config['server_wide_modules'])
         mods = sorted(installed)
-        routing_map = werkzeug.routing.Map(
-            strict_slashes=False, converters=self._get_converters())
+        # Note : when routing map is generated, we put it on the class `cls`
+        # to make it available for all instance. Since `env` create an new instance
+        # of the model, each instance will regenared its own routing map and thus
+        # regenerate its EndPoint. The routing map should be static.
+        routing_map = werkzeug.routing.Map(strict_slashes=False, converters=self._get_converters())
         for url, endpoint in self._generate_routing_rules(mods, converters=self._get_converters()):
             routing = submap(endpoint.routing, ROUTING_KEYS)
             if routing['methods'] is not None and 'OPTIONS' not in routing['methods']:
-                routing['methods'] = routing['methods'] + ['OPTIONS']
+                routing['methods'] = [*routing['methods'], 'OPTIONS']
             rule = FasterRule(url, endpoint=endpoint, **routing)
             rule.merge_slashes = False
             routing_map.add(rule)
@@ -69,5 +74,3 @@ def _uninstall_cleanup(env):
     IrHttp.routing_map = routing_map
     env['ir.http'].env.registry.clear_cache("routing")
     env['ir.attachment'].regenerate_assets_bundles()
-
-

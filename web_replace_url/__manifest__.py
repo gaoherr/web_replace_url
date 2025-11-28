@@ -2,7 +2,7 @@
 # License LGPLv3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.en.html).
 {
     "name": "Url odoo18 Replace",
-    'version': '1.0.3',
+    'version': '19.0.3',
     "author": "1311793927@qq.com",
     'support': '1311793927qq.com',
     "summary": "URL Replace  link",
@@ -24,5 +24,4 @@
     },
     "installable": True,
     'uninstall_hook': '_uninstall_cleanup',
-    'post_init_hook': '_setup_module',
 }

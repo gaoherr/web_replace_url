@@ -7,6 +7,7 @@ import { redirect } from "@web/core/utils/urls";
 const defaulRegistry= registry.category("default")
 export class ReloadFormController extends FormController {
     async save({ closable, ...otherParams }) {
+      debugger
       const saved = await super.save(otherParams);
       debugger
       if ( saved && this.model.root._values.key=='web.base.sorturl'){
